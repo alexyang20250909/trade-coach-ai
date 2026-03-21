@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Trades from "./pages/Trades";
 import Plans from "./pages/Plans";
 import Discipline from "./pages/Discipline";
+import Analytics from "./pages/Analytics";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/trades" element={<Trades />} />
               <Route path="/plans" element={<Plans />} />
               <Route path="/discipline" element={<Discipline />} />
+              <Route path="/analytics" element={<Analytics />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
