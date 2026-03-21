@@ -54,6 +54,7 @@ interface Props {
 export default function TradeFormDialog({ open, onOpenChange }: Props) {
   const createTrade = useCreateTrade();
   const createDisciplineLog = useCreateDisciplineLog();
+  const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       symbol: "",
