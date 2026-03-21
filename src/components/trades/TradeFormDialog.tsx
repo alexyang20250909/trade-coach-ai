@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useCreateTrade } from "@/hooks/use-trading-data";
+import { useCreateTrade, useCreateDisciplineLog } from "@/hooks/use-trading-data";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -53,6 +53,7 @@ interface Props {
 
 export default function TradeFormDialog({ open, onOpenChange }: Props) {
   const createTrade = useCreateTrade();
+  const createDisciplineLog = useCreateDisciplineLog();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -76,6 +77,18 @@ export default function TradeFormDialog({ open, onOpenChange }: Props) {
       toast({ title: "请先登录", variant: "destructive" });
       return;
     }
+
+    // Check for matching pre-trade plan
+    const { data: matchingPlans } = await supabase
+      .from("trade_plans")
+      .select("id, planned_entry, stop_loss, take_profit")
+      .eq("user_id", user.id)
+      .eq("symbol", values.symbol.toUpperCase())
+      .eq("direction", values.direction)
+      .in("status", ["pending", "executed"]);
+
+    const hasPlan = matchingPlans && matchingPlans.length > 0;
+    const matchedPlan = hasPlan ? matchingPlans[0] : null;
 
     const exitPrice = values.exit_price ? Number(values.exit_price) : null;
     const pnl = values.status === "closed" && exitPrice
@@ -102,10 +115,49 @@ export default function TradeFormDialog({ open, onOpenChange }: Props) {
         confidence_score: values.confidence_score ?? null,
         fomo_score: values.fomo_score ?? null,
         notes: values.notes || null,
+        plan_id: matchedPlan?.id || null,
       },
       {
-        onSuccess: () => {
-          toast({ title: "交易已保存" });
+        onSuccess: (trade) => {
+          // Auto-log discipline violation if no matching plan
+          if (!hasPlan) {
+            createDisciplineLog.mutate({
+              user_id: user.id,
+              trade_id: trade.id,
+              violation_type: "冲动开仓",
+              severity: "high",
+              penalty_points: 10,
+              description: `标的 ${values.symbol} 无盘前推演计划即开仓`,
+            });
+            toast({
+              title: "⚠️ 纪律警告：冲动开仓",
+              description: `未找到 ${values.symbol} 的盘前推演计划，已扣减10分`,
+              variant: "destructive",
+            });
+          } else {
+            // Check entry price deviation from plan
+            const planned = Number(matchedPlan!.planned_entry);
+            const deviation = Math.abs(values.entry_price - planned) / planned * 100;
+            if (deviation > 3) {
+              createDisciplineLog.mutate({
+                user_id: user.id,
+                trade_id: trade.id,
+                violation_type: "偏离计划入场",
+                severity: "medium",
+                penalty_points: 5,
+                description: `实际入场 ${values.entry_price} 偏离计划 ${planned} 达 ${deviation.toFixed(1)}%`,
+              });
+              toast({
+                title: "⚠️ 入场偏离计划",
+                description: `偏离 ${deviation.toFixed(1)}%，已扣减5分`,
+                variant: "destructive",
+              });
+            } else {
+              toast({ title: "✅ 交易已保存，执行符合计划" });
+            }
+            // Update plan status to executed
+            supabase.from("trade_plans").update({ status: "executed" }).eq("id", matchedPlan!.id).then();
+          }
           form.reset();
           onOpenChange(false);
         },

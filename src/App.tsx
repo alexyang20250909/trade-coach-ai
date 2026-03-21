@@ -9,6 +9,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Trades from "./pages/Trades";
 import Plans from "./pages/Plans";
+import Discipline from "./pages/Discipline";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/trades" element={<Trades />} />
               <Route path="/plans" element={<Plans />} />
+              <Route path="/discipline" element={<Discipline />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
