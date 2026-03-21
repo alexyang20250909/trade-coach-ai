@@ -104,6 +104,21 @@ export function useDisciplineLogs() {
   });
 }
 
+export function useCreateDisciplineLog() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (log: Database["public"]["Tables"]["discipline_logs"]["Insert"]) => {
+      const { data, error } = await supabase.from("discipline_logs").insert(log).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["discipline-logs"] });
+      qc.invalidateQueries({ queryKey: ["discipline-score"] });
+    },
+  });
+}
+
 export function useDisciplineScore() {
   return useQuery({
     queryKey: ["discipline-score"],

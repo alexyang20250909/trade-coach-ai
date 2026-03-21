@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useCreateTrade } from "@/hooks/use-trading-data";
+import { useCreateTrade, useCreateDisciplineLog } from "@/hooks/use-trading-data";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import {
