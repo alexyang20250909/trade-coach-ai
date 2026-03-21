@@ -11,6 +11,7 @@ import Trades from "./pages/Trades";
 import Plans from "./pages/Plans";
 import Discipline from "./pages/Discipline";
 import Analytics from "./pages/Analytics";
+import Review from "./pages/Review";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/plans" element={<Plans />} />
               <Route path="/discipline" element={<Discipline />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/review" element={<Review />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
