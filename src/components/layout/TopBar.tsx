@@ -27,10 +27,7 @@ export default function TopBar() {
         <span className="text-xs font-mono text-muted-foreground">
           {new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", weekday: "short" })}
         </span>
-        <button className="relative p-2 rounded-lg hover:bg-accent transition-colors">
-          <Bell className="w-4 h-4 text-muted-foreground" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-loss rounded-full" />
-        </button>
+        <NotificationPopover />
         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
           {user?.email?.charAt(0).toUpperCase() || "T"}
         </div>
