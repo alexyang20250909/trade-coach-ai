@@ -12,6 +12,8 @@ import Plans from "./pages/Plans";
 import Discipline from "./pages/Discipline";
 import Analytics from "./pages/Analytics";
 import Review from "./pages/Review";
+import AICoach from "./pages/AICoach";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
