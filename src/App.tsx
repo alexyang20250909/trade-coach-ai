@@ -12,6 +12,8 @@ import Plans from "./pages/Plans";
 import Discipline from "./pages/Discipline";
 import Analytics from "./pages/Analytics";
 import Review from "./pages/Review";
+import AICoach from "./pages/AICoach";
+import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
@@ -41,6 +43,8 @@ const App = () => (
               <Route path="/discipline" element={<Discipline />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/review" element={<Review />} />
+              <Route path="/ai-coach" element={<AICoach />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
