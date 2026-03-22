@@ -66,7 +66,7 @@ export default function TradeFormDialog({ open, onOpenChange }: Props) {
       status: "open",
       entry_price: "" as any,
       quantity: "" as any,
-      exit_price: "",
+      exit_price: undefined,
       decision_logic: "",
       confidence_score: 50,
       fomo_score: 20,
