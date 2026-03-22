@@ -36,7 +36,10 @@ const schema = z.object({
   direction: z.enum(["long", "short"]),
   entry_price: z.coerce.number().positive("入场价必须大于0"),
   quantity: z.coerce.number().positive("数量必须大于0"),
-  exit_price: z.union([z.coerce.number().positive("出场价必须大于0"), z.literal(""), z.undefined()]).optional(),
+  exit_price: z.preprocess(
+    (v) => (v === "" || v === undefined || v === null ? undefined : Number(v)),
+    z.number().positive("出场价必须大于0").optional()
+  ),
   status: z.enum(["open", "closed"]),
   decision_logic: z.string().max(200).optional(),
   confidence_score: z.number().min(0).max(100).optional(),
