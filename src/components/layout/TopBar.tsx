@@ -1,6 +1,7 @@
-import { Bell, Search, LogOut } from "lucide-react";
+import { Search, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import NotificationPopover from "./NotificationPopover";
 
 export default function TopBar() {
   const { user, signOut } = useAuth();
