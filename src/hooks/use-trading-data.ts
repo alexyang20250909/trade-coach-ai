@@ -89,6 +89,17 @@ export function useCreateTradePlan() {
   });
 }
 
+export function useDeleteTradePlan() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("trade_plans").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["trade-plans"] }),
+  });
+}
+
 export function useDisciplineLogs() {
   return useQuery({
     queryKey: ["discipline-logs"],

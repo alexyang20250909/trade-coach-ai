@@ -1,14 +1,46 @@
 import { motion } from "framer-motion";
-import { Brain, Sparkles, ArrowRight } from "lucide-react";
+import { Brain, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import { useTradeStats, useDisciplineScore } from "@/hooks/use-trading-data";
+import { useNavigate } from "react-router-dom";
 
 export default function AIInsight() {
+  const { data: stats, isLoading: statsLoading } = useTradeStats();
+  const { data: discipline, isLoading: discLoading } = useDisciplineScore();
+  const navigate = useNavigate();
+
+  const isLoading = statsLoading || discLoading;
+
+  const insights: string[] = [];
+  if (stats) {
+    if (stats.winRate < 50) {
+      insights.push(`📊 当前胜率 ${stats.winRate.toFixed(1)}%，低于50%警戒线。建议减少交易频次，专注高确定性机会。`);
+    } else {
+      insights.push(`📊 当前胜率 ${stats.winRate.toFixed(1)}%，共 ${stats.totalTrades} 笔交易，${stats.wins} 胜。保持当前策略节奏。`);
+    }
+    if (stats.avgR < 0) {
+      insights.push(`⚠️ R乘数均值 ${stats.avgR.toFixed(2)}R，期望值为负。建议检查止损设置和持仓时间。`);
+    } else if (stats.avgR > 1) {
+      insights.push(`🎯 R乘数均值 +${stats.avgR.toFixed(2)}R，表现优异。继续保持当前风险管理策略。`);
+    }
+  }
+  if (discipline) {
+    const topViolation = Object.entries(discipline.violations).sort((a, b) => b[1] - a[1])[0];
+    if (topViolation) {
+      insights.push(`🚨 最频繁违规：「${topViolation[0]}」共 ${topViolation[1]} 次，纪律评分 ${discipline.score}/100。`);
+    }
+  }
+
+  if (!insights.length && !isLoading) {
+    insights.push("📝 暂无交易数据，录入交易后将自动生成 AI 洞察分析。");
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.35 }}
       className="rounded-xl border border-primary/20 p-5 relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, hsl(145 100% 45% / 0.05), hsl(220 18% 10%))" }}
+      style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.05), hsl(var(--background)))" }}
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
       <div className="flex items-center gap-2 mb-3">
@@ -16,26 +48,26 @@ export default function AIInsight() {
         <h3 className="text-sm font-semibold text-foreground">AI 教练洞察</h3>
         <Sparkles className="w-3 h-3 text-primary animate-pulse-glow" />
       </div>
-      
-      <div className="space-y-3">
-        <div className="bg-muted/50 rounded-lg p-3">
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            📊 本周分析：你在<span className="text-warning font-medium">周二和周四</span>的交易纪律明显下滑，
-            冲动开仓比例达到 <span className="text-loss font-mono font-medium">40%</span>。建议在这两天
-            减少交易频次，严格执行盘前计划。
-          </p>
-        </div>
-        <div className="bg-muted/50 rounded-lg p-3">
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            🎯 策略反馈：<span className="text-profit font-medium">均线突破策略</span>在近 30 天的胜率为 
-            <span className="text-profit font-mono font-medium">67%</span>，R 乘数均值 
-            <span className="text-profit font-mono font-medium">+1.8R</span>，表现优异。
-            建议增加该策略仓位比例。
-          </p>
-        </div>
-      </div>
 
-      <button className="mt-3 flex items-center gap-1 text-xs text-primary hover:underline font-medium">
+      {isLoading ? (
+        <div className="flex items-center gap-2 py-4">
+          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">分析中…</span>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {insights.map((text, i) => (
+            <div key={i} className="bg-muted/50 rounded-lg p-3">
+              <p className="text-xs text-muted-foreground leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <button
+        onClick={() => navigate("/ai-coach")}
+        className="mt-3 flex items-center gap-1 text-xs text-primary hover:underline font-medium"
+      >
         开始 AI 对话 <ArrowRight className="w-3 h-3" />
       </button>
     </motion.div>
