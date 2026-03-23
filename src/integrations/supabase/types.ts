@@ -55,6 +55,68 @@ export type Database = {
           },
         ]
       }
+      checklist_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          sort_order: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label: string
+          sort_order?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          sort_order?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      checklist_logs: {
+        Row: {
+          all_checked: boolean
+          completed_items: Json
+          created_at: string
+          id: string
+          trade_id: string | null
+          user_id: string
+        }
+        Insert: {
+          all_checked?: boolean
+          completed_items?: Json
+          created_at?: string
+          id?: string
+          trade_id?: string | null
+          user_id: string
+        }
+        Update: {
+          all_checked?: boolean
+          completed_items?: Json
+          created_at?: string
+          id?: string
+          trade_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklist_logs_trade_id_fkey"
+            columns: ["trade_id"]
+            isOneToOne: false
+            referencedRelation: "trades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discipline_logs: {
         Row: {
           created_at: string
