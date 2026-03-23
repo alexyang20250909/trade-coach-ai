@@ -67,6 +67,7 @@ export default function Settings() {
           <TabsTrigger value="account" className="gap-1.5 text-xs"><User className="w-3.5 h-3.5" /> 账户</TabsTrigger>
           <TabsTrigger value="security" className="gap-1.5 text-xs"><Lock className="w-3.5 h-3.5" /> 安全</TabsTrigger>
           <TabsTrigger value="notifications" className="gap-1.5 text-xs"><Bell className="w-3.5 h-3.5" /> 通知</TabsTrigger>
+          <TabsTrigger value="checklist" className="gap-1.5 text-xs"><CheckSquare className="w-3.5 h-3.5" /> 检查清单</TabsTrigger>
         </TabsList>
 
         <TabsContent value="account">
