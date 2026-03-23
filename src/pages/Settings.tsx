@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Settings as SettingsIcon, Lock, User, Bell, LogOut } from "lucide-react";
+import { Settings as SettingsIcon, Lock, User, Bell, LogOut, CheckSquare } from "lucide-react";
+import ChecklistSettings from "@/components/settings/ChecklistSettings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,6 +67,7 @@ export default function Settings() {
           <TabsTrigger value="account" className="gap-1.5 text-xs"><User className="w-3.5 h-3.5" /> 账户</TabsTrigger>
           <TabsTrigger value="security" className="gap-1.5 text-xs"><Lock className="w-3.5 h-3.5" /> 安全</TabsTrigger>
           <TabsTrigger value="notifications" className="gap-1.5 text-xs"><Bell className="w-3.5 h-3.5" /> 通知</TabsTrigger>
+          <TabsTrigger value="checklist" className="gap-1.5 text-xs"><CheckSquare className="w-3.5 h-3.5" /> 检查清单</TabsTrigger>
         </TabsList>
 
         <TabsContent value="account">
@@ -146,6 +148,12 @@ export default function Settings() {
                 </div>
               </div>
             </div>
+          </motion.div>
+        </TabsContent>
+
+        <TabsContent value="checklist">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
+            <ChecklistSettings />
           </motion.div>
         </TabsContent>
       </Tabs>
