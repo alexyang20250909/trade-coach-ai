@@ -25,8 +25,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: LayoutDashboard, label: "仪表盘", path: "/", category: "核心" },
-  { icon: FileText, label: "交易日志", path: "/trades", category: "核心" },
   { icon: Target, label: "盘前推演", path: "/plans", category: "核心" },
+  { icon: FileText, label: "交易日志", path: "/trades", category: "核心" },
   { icon: ClipboardCheck, label: "执行监控", path: "/discipline", category: "分析" },
   { icon: BarChart3, label: "数据分析", path: "/analytics", category: "分析" },
   { icon: Calendar, label: "周期复盘", path: "/review", category: "分析" },
