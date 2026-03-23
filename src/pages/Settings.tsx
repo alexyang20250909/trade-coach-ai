@@ -150,6 +150,12 @@ export default function Settings() {
             </div>
           </motion.div>
         </TabsContent>
+
+        <TabsContent value="checklist">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
+            <ChecklistSettings />
+          </motion.div>
+        </TabsContent>
       </Tabs>
     </div>
   );
