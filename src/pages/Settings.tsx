@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Settings as SettingsIcon, Lock, User, Bell, LogOut } from "lucide-react";
+import { Settings as SettingsIcon, Lock, User, Bell, LogOut, CheckSquare } from "lucide-react";
+import ChecklistSettings from "@/components/settings/ChecklistSettings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
