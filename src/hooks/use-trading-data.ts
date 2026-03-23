@@ -62,6 +62,35 @@ export function useCreateTrade() {
   });
 }
 
+export function useUpdateTrade() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string } & Partial<TradeInsert>) => {
+      const { data, error } = await supabase.from("trades").update(updates).eq("id", id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["trades"] });
+      qc.invalidateQueries({ queryKey: ["trade-stats"] });
+    },
+  });
+}
+
+export function useDeleteTrade() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("trades").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["trades"] });
+      qc.invalidateQueries({ queryKey: ["trade-stats"] });
+    },
+  });
+}
+
 export function useTradePlans() {
   return useQuery({
     queryKey: ["trade-plans"],
